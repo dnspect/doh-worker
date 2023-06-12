@@ -20,18 +20,18 @@ This package is designed to be used with [Cloudflare Workers](https://workers.cl
 Build a DoH proxy:
 
 ```javascript
-import { handle } from '@dnspect/doh-workers'
+import { handle } from '@dnspect/doh-workers';
 
 export interface Env {}
 
 export default {
   async fetch(req: Request, _env: Env, ctx: ExecutionContext): Promise<Response> {
-    const url = new URL(req.url)
+    const url = new URL(req.url);
     if (url.pathname === '/favicon.ico') {
-      return new Response(null, { status: 404 })
+      return new Response(null, { status: 404 });
     }
 
-    return handle(ctx, req, { hostname: '1.1.1.1', port: 53 })
+    return handle(ctx, req, { hostname: '1.1.1.1', port: 53 });
   },
-}
+};
 ```

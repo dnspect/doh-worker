@@ -1,8 +1,8 @@
-import { stringToBinary } from '@dnspect/dns-ts'
-import { ProxyError, proxy } from './proxy'
+import { stringToBinary } from '@dnspect/dns-ts';
+import { ProxyError, proxy } from './proxy';
 
-const MIN_DNS_QUERY_SIZE = 12
-const MAX_DNS_QUERY_SIZE = 512
+const MIN_DNS_QUERY_SIZE = 12;
+const MAX_DNS_QUERY_SIZE = 512;
 
 /**
  * Processes DoH GET requests using application/dns-message scheme.
@@ -17,47 +17,47 @@ export async function get(
     dnsServer: SocketAddress,
     url: URL,
 ): Promise<Response> {
-    let dns = url.searchParams.get('dns')
+    let dns = url.searchParams.get('dns');
     if (!dns) {
-        return fail('Missing "dns" parameter', 400)
+        return fail('Missing "dns" parameter', 400);
     }
 
-    dns = unescapeBase64Url(dns)
+    dns = unescapeBase64Url(dns);
 
-    const size = (dns.length * 3) / 4
+    const size = (dns.length * 3) / 4;
     if (size > MAX_DNS_QUERY_SIZE) {
-        return fail(`DNS message exceeded the 512 byte maximum message size`, 414)
+        return fail(`DNS message exceeded the 512 byte maximum message size`, 414);
     }
 
-    let data: Uint8Array
+    let data: Uint8Array;
     try {
-        data = stringToBinary(dns, 'base64')
+        data = stringToBinary(dns, 'base64');
     } catch (e) {
-        console.debug('failed to decode base64url: ' + e)
-        return fail('Invalid base64url string', 400)
+        console.debug('failed to decode base64url: ' + e);
+        return fail('Invalid base64url string', 400);
     }
 
     // Obviously, invalid data.
     if (data.byteLength < MIN_DNS_QUERY_SIZE) {
-        return fail(`Invalid DNS message`, 400)
+        return fail(`Invalid DNS message`, 400);
     }
 
     try {
-        const respData = await proxy(dnsServer, data, ctx)
+        const respData = await proxy(dnsServer, data, ctx);
         return new Response(respData, {
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Content-Type': 'application/dns-message',
             },
-        })
+        });
     } catch (e) {
         if (e instanceof Error) {
-            console.debug(e.stack)
+            console.debug(e.stack);
         }
         if (e instanceof ProxyError) {
-            return fail(e.publicMessage, e.status)
+            return fail(e.publicMessage, e.status);
         }
-        return fail('unknown server error', 500)
+        return fail('unknown server error', 500);
     }
 }
 
@@ -75,40 +75,40 @@ export async function post(
     payload: ArrayBuffer,
 ): Promise<Response> {
     if (payload.byteLength > MAX_DNS_QUERY_SIZE) {
-        return fail(`DNS message exceeded the 512 byte maximum message size`, 413)
+        return fail(`DNS message exceeded the 512 byte maximum message size`, 413);
     }
 
-    const data = new Uint8Array(payload)
+    const data = new Uint8Array(payload);
     if (data.byteLength < MIN_DNS_QUERY_SIZE) {
-        return fail(`Invalid DNS message`, 400)
+        return fail(`Invalid DNS message`, 400);
     }
 
     try {
-        const respData = await proxy(dnsServer, data, ctx)
+        const respData = await proxy(dnsServer, data, ctx);
         return new Response(respData, {
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Content-Type': 'application/dns-message',
             },
-        })
+        });
     } catch (e) {
         if (e instanceof Error) {
-            console.debug(e.stack)
+            console.debug(e.stack);
         }
         if (e instanceof ProxyError) {
-            return fail(e.publicMessage, e.status)
+            return fail(e.publicMessage, e.status);
         }
-        return fail('unknown server error', 500)
+        return fail('unknown server error', 500);
     }
 }
 
 function unescapeBase64Url(b64: string): string {
-    return b64.replace(/-/g, '+').replace(/_/g, '/') + '==='.slice((b64.length + 3) % 4)
+    return b64.replace(/-/g, '+').replace(/_/g, '/') + '==='.slice((b64.length + 3) % 4);
 }
 
 export async function fail(msg: string, status: number): Promise<Response> {
     return new Response(msg, {
         status: status,
         headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'text/plain' },
-    })
+    });
 }

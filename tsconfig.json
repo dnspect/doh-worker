@@ -15,7 +15,7 @@
     "sourceMap": true,
     "strict": true,
     "target": "ES2022",
-    "types": ["@cloudflare/workers-types"]
+    "types": ["@cloudflare/workers-types", "vitest-environment-miniflare/globals"]
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"],
