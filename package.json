@@ -1,7 +1,7 @@
 {
   "name": "@dnspect/doh-worker",
-  "version": "0.1.0",
-  "description": "A TypeScript library for building DNS over HTTPS reverse proxies that make DNS servers speak DoH, using Cloudflare Workers.",
+  "version": "0.1.1",
+  "description": "A TypeScript library for building DNS over HTTPS reverse proxies that make DNS servers speak DoH using Cloudflare Workers.",
   "author": "Minghang Chen <chen@minghang.dev> (https://minghang.dev)",
   "license": "MIT",
   "type": "module",
