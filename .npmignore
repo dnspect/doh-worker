@@ -1,0 +1,10 @@
+.editorconfig
+.github/
+.gitignore
+.mocharc.json
+.prettierignore
+.prettierrc
+*.tgz
+node_modules/
+package-lock.json
+tsconfig.*

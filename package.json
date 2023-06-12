@@ -1,0 +1,40 @@
+{
+  "name": "@dnspect/doh-worker",
+  "version": "0.1.0",
+  "description": "A TypeScript library for building DNS over HTTPS reverse proxies that make DNS servers speak DoH, using Cloudflare Workers.",
+  "author": "Minghang Chen <chen@minghang.dev> (https://minghang.dev)",
+  "license": "MIT",
+  "type": "module",
+  "types": "./dist/index.d.ts",
+  "main": "./dist/index.js",
+  "dependencies": {
+    "@dnspect/dns-ts": "0.2",
+    "@dnspect/ip-address-ts": "0.2"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "4",
+    "prettier": "2.8",
+    "typescript": "5.0"
+  },
+  "scripts": {
+    "test": "mocha",
+    "build": "tsc -d",
+    "format": "prettier --write \"**/*.{js,ts,json,md}\"",
+    "lint:code": "prettier --check \"**/*.{js,ts,json,md}\"",
+    "lint:markdown": "markdownlint \"**/*.md\" --ignore node_modules"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dnspect/doh-worker.git"
+  },
+  "keywords": [
+    "dns",
+    "doh",
+    "cloudflare",
+    "workers"
+  ],
+  "bugs": {
+    "url": "https://github.com/dnspect/doh-worker/issues"
+  },
+  "homepage": "https://github.com/dnspect/doh-worker"
+}
